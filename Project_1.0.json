@@ -1,0 +1,584 @@
+{
+  "name": "Project_1.0",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyHour"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "=1q4RETTa6ybkY4_2UxTUlBNiA9O8_mz4F9Om2hT2zqrM",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "student_data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1q4RETTa6ybkY4_2UxTUlBNiA9O8_mz4F9Om2hT2zqrM/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1536,
+        -688
+      ],
+      "id": "6c00aeb0-e23b-44bc-a8aa-8ffeeb9c828b",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "NlZzIApiacoAPTcs",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a82c9043-3ebb-43e4-96b5-6e1fafb0a166",
+              "leftValue": "={{ $json.payment_status }}",
+              "rightValue": "paid",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "08feddd8-cc93-4e24-ba28-3b5d8d2e1f93",
+              "leftValue": "={{ $json.message_sent }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "e255e10b-ae4f-4980-bbfa-aa62599f593b",
+              "leftValue": "={{ $json.telegra_chat_id }}",
+              "rightValue": "=",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1248,
+        -688
+      ],
+      "id": "44052e22-63d2-4cae-91b9-5178f668aabf",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.telegra_chat_id }}",
+        "text": "=`প্রিয় অভিভাবক,\n\nআশা করি আপনি ও আপনার পরিবার সুস্থ ও ভালো আছেন। 😊\n\nআপনাকে জানাতে পেরে আনন্দিত যে, আপনার সন্তান {{ $json.student_name }} (আইডি: {{ $json.student_id }}-এর এই সেমিস্টারের ফি {{ $json.smester_fees }} টাকা সফলভাবে গ্রহণ করা হয়েছে। ✅\n\nআপনার সময়মতো পেমেন্টের জন্য আন্তরিক ধন্যবাদ। আপনার সহযোগিতা {{ $json.student_name }} এর উজ্জ্বল ভবিষ্যৎ গড়ে তুলতে আমাদের অনুপ্রাণিত করে। 🎓✨\n\n{{ $json.student_name }}-এর পড়াশোনায় আমরা সর্বদা পাশে আছি।\n\nশুভকামনায়,\nপ্রশাসন বিভাগ 🌟`;",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -848,
+        -704
+      ],
+      "id": "44ea2eeb-a6a3-48a7-88c5-3b79d9a390d2",
+      "name": "Send a text message",
+      "webhookId": "0ccad4e3-5875-4c26-a2e4-f11da7b435a3",
+      "credentials": {
+        "telegramApi": {
+          "id": "rmJs7PzfqVN6jL0C",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.telegra_chat_id }}",
+        "text": "= `সম্মানিত অভিভাবক,  আপনার সন্তান {{ $json.student_name }} (শিক্ষার্থী আইডি: {{ $json.student_id }} এর এই সেমিস্টারের ফি বাবদ {{ $json.smester_fees }} টাকা এখনও পরিশোধ করা হয়নি।  অনুগ্রহ করে দ্রুত ফি পরিশোধ করুন। সময়মতো ফি না দিলে পরীক্ষায় অংশগ্রহণে সমস্যা হতে পারে।  ধন্যবাদ, প্রশাসন বিভাগ বিশ্ববিদ্যালয়`;",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -688,
+        -464
+      ],
+      "id": "4f762571-a891-425c-862e-57e6f4dd5984",
+      "name": "Send a text message1",
+      "webhookId": "6a883f38-9b2f-433b-8a6f-6fbdcb85f648",
+      "retryOnFail": false,
+      "credentials": {
+        "telegramApi": {
+          "id": "rmJs7PzfqVN6jL0C",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1q4RETTa6ybkY4_2UxTUlBNiA9O8_mz4F9Om2hT2zqrM",
+          "mode": "list",
+          "cachedResultName": "student data ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1q4RETTa6ybkY4_2UxTUlBNiA9O8_mz4F9Om2hT2zqrM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "student_data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1q4RETTa6ybkY4_2UxTUlBNiA9O8_mz4F9Om2hT2zqrM/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "student_id": "={{ $('If').item.json['student_id'] }}",
+            "message_sent": "true"
+          },
+          "matchingColumns": [
+            "student_id"
+          ],
+          "schema": [
+            {
+              "id": "student_id",
+              "displayName": "student_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "student_name",
+              "displayName": "student_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "phone_number",
+              "displayName": "phone_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "smester_fees",
+              "displayName": "smester_fees",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "presentation_score",
+              "displayName": "presentation_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "telegra_chat_id",
+              "displayName": "telegra_chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "grade",
+              "displayName": "grade",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "payment_status",
+              "displayName": "payment_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "message_sent",
+              "displayName": "message_sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -432,
+        -704
+      ],
+      "id": "d4d11aba-34e8-4e0e-b44e-de93be03b0d0",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "C8LQIzGyTdA0PC9Q",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1q4RETTa6ybkY4_2UxTUlBNiA9O8_mz4F9Om2hT2zqrM",
+          "mode": "list",
+          "cachedResultName": "student data ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1q4RETTa6ybkY4_2UxTUlBNiA9O8_mz4F9Om2hT2zqrM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "student_data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1q4RETTa6ybkY4_2UxTUlBNiA9O8_mz4F9Om2hT2zqrM/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "student_id": "={{ $('unpaid').item.json['student_id'] }}",
+            "message_sent": "true"
+          },
+          "matchingColumns": [
+            "student_id"
+          ],
+          "schema": [
+            {
+              "id": "student_id",
+              "displayName": "student_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "student_name",
+              "displayName": "student_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "phone_number",
+              "displayName": "phone_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "smester_fees",
+              "displayName": "smester_fees",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "presentation_score",
+              "displayName": "presentation_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "telegra_chat_id",
+              "displayName": "telegra_chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "grade",
+              "displayName": "grade",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "payment_status",
+              "displayName": "payment_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "message_sent",
+              "displayName": "message_sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -432,
+        -464
+      ],
+      "id": "02aa57b3-080d-4391-9b6f-a54a9c5cc2b9",
+      "name": "Update row in sheet1",
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "C8LQIzGyTdA0PC9Q",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6cd21878-6331-46a4-8c7b-849240c26ebc",
+              "leftValue": "={{ $json.payment_status }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "16afe4a0-c31c-4865-bcc9-dd2eeed6814d",
+              "leftValue": "={{ $json.message_sent }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "9f97c231-b743-4406-bc81-50fb85d068aa",
+              "leftValue": "={{ $json.telegra_chat_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -944,
+        -448
+      ],
+      "id": "6e85d450-aeef-423b-9686-c3e312e11314",
+      "name": "unpaid"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "unpaid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message1": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet1": {
+      "main": [
+        []
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "unpaid": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "6bbd65a7-723f-4bad-ac4c-1055f122558e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cfce33b80f5ae6a0d5303de4fff14814cfe277d74b396df27064e89ad54e7611"
+  },
+  "id": "D1MLzpyiuqhivtbO",
+  "tags": []
+}
