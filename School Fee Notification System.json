@@ -1,5 +1,5 @@
 {
-  "name": "Project_1.0",
+  "name": "School Fee Notification System",
   "nodes": [
     {
       "parameters": {
@@ -90,12 +90,12 @@
         -688
       ],
       "id": "44052e22-63d2-4cae-91b9-5178f668aabf",
-      "name": "If"
+      "name": "Filter: Paid & Unsent"
     },
     {
       "parameters": {
         "chatId": "={{ $json.telegra_chat_id }}",
-        "text": "=`প্রিয় অভিভাবক,\n\nআশা করি আপনি ও আপনার পরিবার সুস্থ ও ভালো আছেন। 😊\n\nআপনাকে জানাতে পেরে আনন্দিত যে, আপনার সন্তান {{ $json.student_name }} (আইডি: {{ $json.student_id }}-এর এই সেমিস্টারের ফি {{ $json.smester_fees }} টাকা সফলভাবে গ্রহণ করা হয়েছে। ✅\n\nআপনার সময়মতো পেমেন্টের জন্য আন্তরিক ধন্যবাদ। আপনার সহযোগিতা {{ $json.student_name }} এর উজ্জ্বল ভবিষ্যৎ গড়ে তুলতে আমাদের অনুপ্রাণিত করে। 🎓✨\n\n{{ $json.student_name }}-এর পড়াশোনায় আমরা সর্বদা পাশে আছি।\n\nশুভকামনায়,\nপ্রশাসন বিভাগ 🌟`;",
+        "text": "=`প্রিয় অভিভাবক,\n\nআশা করি আপনি ও আপনার পরিবার সুস্থ ও ভালো আছেন। 😊\n\nআপনাকে জানাতে পেরে আনন্দিত যে, আপনার সন্তান {{ $json.student_name }} (আইডি: {{ $json.student_id }}-এর এই সেমিস্টারের ফি {{ $json.semester_fee }} টাকা সফলভাবে গ্রহণ করা হয়েছে। ✅\n\nআপনার সময়মতো পেমেন্টের জন্য আন্তরিক ধন্যবাদ। আপনার সহযোগিতা {{ $json.student_name }} এর উজ্জ্বল ভবিষ্যৎ গড়ে তুলতে আমাদের অনুপ্রাণিত করে। 🎓✨\n\n{{ $json.student_name }}-এর পড়াশোনায় আমরা সর্বদা পাশে আছি।\n\nশুভকামনায়,\nপ্রশাসন বিভাগ 🌟`;",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.telegram",
@@ -105,7 +105,7 @@
         -704
       ],
       "id": "44ea2eeb-a6a3-48a7-88c5-3b79d9a390d2",
-      "name": "Send a text message",
+      "name": "Payment Confirmation Message",
       "webhookId": "0ccad4e3-5875-4c26-a2e4-f11da7b435a3",
       "credentials": {
         "telegramApi": {
@@ -118,7 +118,7 @@
     {
       "parameters": {
         "chatId": "={{ $json.telegra_chat_id }}",
-        "text": "= `সম্মানিত অভিভাবক,  আপনার সন্তান {{ $json.student_name }} (শিক্ষার্থী আইডি: {{ $json.student_id }} এর এই সেমিস্টারের ফি বাবদ {{ $json.smester_fees }} টাকা এখনও পরিশোধ করা হয়নি।  অনুগ্রহ করে দ্রুত ফি পরিশোধ করুন। সময়মতো ফি না দিলে পরীক্ষায় অংশগ্রহণে সমস্যা হতে পারে।  ধন্যবাদ, প্রশাসন বিভাগ বিশ্ববিদ্যালয়`;",
+        "text": "= `সম্মানিত অভিভাবক,  আপনার সন্তান {{ $json.student_name }} (শিক্ষার্থী আইডি: {{ $json.student_id }} এর এই সেমিস্টারের ফি বাবদ {{ $json.semester_fee }} টাকা এখনও পরিশোধ করা হয়নি।  অনুগ্রহ করে দ্রুত ফি পরিশোধ করুন। সময়মতো ফি না দিলে পরীক্ষায় অংশগ্রহণে সমস্যা হতে পারে।  ধন্যবাদ, প্রশাসন বিভাগ বিশ্ববিদ্যালয়`;",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.telegram",
@@ -128,7 +128,7 @@
         -464
       ],
       "id": "4f762571-a891-425c-862e-57e6f4dd5984",
-      "name": "Send a text message1",
+      "name": "Payment Reminder Message",
       "webhookId": "6a883f38-9b2f-433b-8a6f-6fbdcb85f648",
       "retryOnFail": false,
       "credentials": {
@@ -159,7 +159,7 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "student_id": "={{ $('If').item.json['student_id'] }}",
+            "student_id": "={{ $('Filter: Paid & Unsent').item.json['student_id'] }}",
             "message_sent": "true"
           },
           "matchingColumns": [
@@ -280,7 +280,7 @@
         -704
       ],
       "id": "d4d11aba-34e8-4e0e-b44e-de93be03b0d0",
-      "name": "Update row in sheet",
+      "name": "Mark Paid Notified",
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "C8LQIzGyTdA0PC9Q",
@@ -308,7 +308,7 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "student_id": "={{ $('unpaid').item.json['student_id'] }}",
+            "student_id": "={{ $('Filter: Unpaid & Unsent').item.json['student_id'] }}",
             "message_sent": "true"
           },
           "matchingColumns": [
@@ -429,7 +429,7 @@
         -464
       ],
       "id": "02aa57b3-080d-4391-9b6f-a54a9c5cc2b9",
-      "name": "Update row in sheet1",
+      "name": "Mark Unpaid Notified",
       "alwaysOutputData": false,
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -489,7 +489,40 @@
         -448
       ],
       "id": "6e85d450-aeef-423b-9686-c3e312e11314",
-      "name": "unpaid"
+      "name": "Filter: Unpaid & Unsent"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1552,
+        -432
+      ],
+      "id": "4a6d2cd9-7069-4d75-9655-3a3596e02ad0",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "chatId": "1123787496",
+        "text": "=⚠️ Workflow Error Alert\n\nWorkflow: School Fee Notification System\nError: {{ $json.execution.error.message }}\nNode: {{ $json.execution.lastNodeExecuted }}\nTime: {{ $now }}\n\nCheck your n8n instance immediately.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1264,
+        -432
+      ],
+      "id": "a09cdd4e-5827-4f12-9cf0-cbda6ef5dc15",
+      "name": "Error Alert",
+      "webhookId": "22c92851-04fe-4b61-ade2-0833702a7b5e",
+      "credentials": {
+        "telegramApi": {
+          "id": "rmJs7PzfqVN6jL0C",
+          "name": "Telegram account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -498,73 +531,84 @@
       "main": [
         [
           {
-            "node": "If",
+            "node": "Filter: Paid & Unsent",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "If": {
+    "Filter: Paid & Unsent": {
       "main": [
         [
           {
-            "node": "Send a text message",
+            "node": "Payment Confirmation Message",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "unpaid",
+            "node": "Filter: Unpaid & Unsent",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Send a text message": {
+    "Payment Confirmation Message": {
       "main": [
         [
           {
-            "node": "Update row in sheet",
+            "node": "Mark Paid Notified",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Send a text message1": {
+    "Payment Reminder Message": {
       "main": [
         [
           {
-            "node": "Update row in sheet1",
+            "node": "Mark Unpaid Notified",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Update row in sheet1": {
+    "Mark Paid Notified": {
       "main": [
         []
       ]
     },
-    "Update row in sheet": {
+    "Mark Unpaid Notified": {
       "main": [
         []
       ]
     },
-    "unpaid": {
+    "Filter: Unpaid & Unsent": {
       "main": [
         [
           {
-            "node": "Send a text message1",
+            "node": "Payment Reminder Message",
             "type": "main",
             "index": 0
           }
         ],
         []
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Error Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
@@ -574,7 +618,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "6bbd65a7-723f-4bad-ac4c-1055f122558e",
+  "versionId": "3f3dfbe0-7aea-4d80-a62d-cd8da12ef43a",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "cfce33b80f5ae6a0d5303de4fff14814cfe277d74b396df27064e89ad54e7611"
