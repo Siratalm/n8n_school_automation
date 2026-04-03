@@ -8,8 +8,7 @@ An automated fee notification workflow built with **n8n** that sends real-time *
 
 ## 📸 Workflow Preview
 
-> Import the JSON into your n8n instance to see the full canvas with sticky note.
-
+![Workflow Preview](workflow-preview.png)
 ---
 
 ## ✨ Features
