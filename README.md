@@ -1,5 +1,9 @@
 # 🏫 School Fee Notification System
 
+![n8n](https://img.shields.io/badge/n8n-FF6D5A?style=for-the-badge&logo=n8n&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+
 An automated fee notification workflow built with **n8n** that sends real-time **Telegram messages in Bangla** to parents when their child's semester fee status is updated in Google Sheets.
 
 > Built as a portfolio project to demonstrate real-world automation for school management using no-code/low-code tools.
@@ -10,6 +14,16 @@ An automated fee notification workflow built with **n8n** that sends real-time *
 
 ![Workflow Preview](workflow-preview.png)
 ---
+
+### 📐 System Flow
+
+```mermaid
+graph TD
+    A[School Data / Webhook Trigger] --> B[n8n Workflow Engine]
+    B --> C{Data Validation}
+    C -->|Valid| D[(PostgreSQL Database)]
+    C -->|Invalid| E[Error / Log Handler]
+    D --> F[Success Notification / Response]
 
 ## ✨ Features
 
